@@ -33,10 +33,8 @@ public class RainforestShop {
      * @return  Your student id!
      */
     public String studentId() {
-        return "012345678";
+        return "220310897";
     }
-
-
     /**
      *
      * @param client_ids                Collection of registered client names that can set up the communication
