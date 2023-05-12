@@ -45,12 +45,19 @@ public class RainforestShop {
     public RainforestShop(Collection<String> client_ids,
                           Map<String, Pair<Double, Integer>> available_products,
                           boolean isGlobalLock) {
+        //supplierStopped shows the supplier is not supplying new items
         supplierStopped = true;
+        //used to store items that have been withdrawn from the shop but are currently out of stock
         currentEmptyItem = new LinkedBlockingQueue<>();
+        //pessimistic/optimistic transaction
         this.isGlobalLock = isGlobalLock;
+        //set of IDS of allowed clients
+        //if this is null, all clients are allowed
         allowed_clients = new HashSet<>();
         if (client_ids != null) allowed_clients.addAll(client_ids);
+        //used to store the inventory of the shop
         this.available_withdrawn_products = new HashMap<>();
+        //used to map UUIDs (unique identifiers) to client IDs
         UUID_to_user = new HashMap<>();
         if (available_products != null) for (var x : available_products.entrySet()) {
             if (x.getKey().equals("@stop!")) continue;
@@ -86,7 +93,7 @@ public class RainforestShop {
 
     /**
      * This method should be accessible only to the transaction and not to the public!
-     * Logs out the client iff. there was a transaction that was started with a given UUID and that was associated to
+     * Logs out the client if and only if there was a transaction that was started with a given UUID and that was associated to
      * a given user
      *
      * @param transaction
