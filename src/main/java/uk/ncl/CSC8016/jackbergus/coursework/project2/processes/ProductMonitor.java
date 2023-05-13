@@ -21,6 +21,11 @@ public class ProductMonitor {
         }
     }
 
+    /**
+     *
+     * @return
+     */
+
     public Optional<Item> getAvailableItem() {
         Optional<Item> o = Optional.empty();
         if (!available.isEmpty()) {
@@ -41,6 +46,15 @@ public class ProductMonitor {
         }
         return result;
     }
+
+    /**
+     * this method makes a set of string objects
+     * then, the list of objects called 'available' is converted into a new set of strings
+     * this new list is assigned to the variable s
+     * then the method returns the set s with the names of all available items
+     * so we're using a product monitor to return a list of all available items
+     * @return
+     */
 
     public Set<String> getAvailableItems() {
         Set<String> s;
@@ -67,6 +81,11 @@ public class ProductMonitor {
         }
         return total_cost;
     }
+
+    /**
+     * this method uses the product monitor to move an item from the withdrawn list to the available list
+     * @param toIterate
+     */
 
     public void makeAvailable(List<Item> toIterate) {
         for (var x : toIterate) {

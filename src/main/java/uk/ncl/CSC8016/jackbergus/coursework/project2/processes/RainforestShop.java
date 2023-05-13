@@ -101,7 +101,19 @@ public class RainforestShop {
      */
     boolean logout(Transaction transaction) {
         boolean result = false;
-        // TODO: Implement the remaining part!
+        // TO DO: Implement the remaining part!
+
+        if (transaction.getUnmutableBasket() != null) {
+            for (Item productInBasket : transaction.getUnmutableBasket()){
+                for (Map.Entry<String, ProductMonitor> entry : available_withdrawn_products.entrySet()) {
+                    if (entry.getKey().equals(productInBasket.productName)) {
+                        entry.getValue().doShelf(productInBasket);
+                    }
+                }
+            }
+        }
+
+        transaction.invalidateTransaction();
         return result;
     }
 
@@ -118,6 +130,7 @@ public class RainforestShop {
 
     /**
      * If a product can be basketed from the shelf, then a specific instance of the product on the shelf is returned
+     * this is done item by item
      *
      * @param transaction   User reference
      * @param name          Product name picked from the shelf
@@ -125,8 +138,19 @@ public class RainforestShop {
      */
     Optional<Item> basketProductByName(Transaction transaction, String name) {
         AtomicReference<Optional<Item>> result = new AtomicReference<>(Optional.empty());
+        //if the transaction's rainforest shop object or the uuid is null, return the empty result
         if (transaction.getSelf() == null || (transaction.getUuid() == null)) return result.get();
-        // TODO: Implement the remaining part!
+        // TO DO: Implement the remaining part!
+        //create a temporary product monitor
+        //productmonitor is list of available and withdrawn items
+        //if the product monitor is not null, then we can proceed
+        // remove the item from available, add the item to withdrawn (this is done in one step by getavailableitem() )
+        //return the resulting optional item
+
+        ProductMonitor productMonitor = available_withdrawn_products.get(name);
+        if (productMonitor != null) {
+            result.set(productMonitor.getAvailableItem());
+        }
         return result.get();
     }
 
