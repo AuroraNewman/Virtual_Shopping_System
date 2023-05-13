@@ -6,7 +6,6 @@ import uk.ncl.CSC8016.jackbergus.coursework.project2.utils.UtilityMethods;
 import java.util.Random;
 
 /**
- * only edit this class and the product monitor class
  * in client lifecycle, client may be using web app online or mobile app in shop
  * process:
  * * client logs in using login method
@@ -26,14 +25,17 @@ import java.util.Random;
  */
 
 public class ClientLifecycle implements Runnable {
-
     private final String username;
+    //shop instance
     private final RainforestShop s;
+    //number items client desires
     private final int items_to_pick_up;
     private final double total_available_money, shelfing_prob;
+    //a random number used to return a random item from list
     private final Random rng;
+    //while this is false, it is not time to checkout
     private boolean doCheckOut = true;
-
+    //l is the BasketResult, which seems to be the client's individual basket
     BasketResult l;
 
     public ClientLifecycle(String username,
@@ -49,6 +51,8 @@ public class ClientLifecycle implements Runnable {
         this.shelfing_prob = Double.min(1.0, Double.max(0.0, shelfing_prob));
         rng = new Random(rng_seed);
     }
+    //TODO: figure this heffa out
+    //creates a new flag about doCheckOut; this thread can be used elsewhere
 
     public Thread thread(boolean doCheckOut) {
         this.doCheckOut = doCheckOut;

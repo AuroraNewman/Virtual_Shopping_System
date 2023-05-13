@@ -220,7 +220,7 @@ public class RainforestShop {
 
 
     /**
-     * This method is invoked by the Supplier to refurbrish the shop of n products of a given time (current item)
+     * This method is invoked by the Supplier to refurbish the shop of n products of a given time (current item)
      * @param n                 Number of elements to be placed
      * @param currentItem       Type of elements to be placed
      */
