@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class RainforestShop {
 
-    /// For correctly implementing the server, pelase consider that
+    /// For correctly implementing the server, please consider that
 
     private final boolean isGlobalLock;
     private boolean supplierStopped;
@@ -112,8 +112,8 @@ public class RainforestShop {
                 }
             }
         }
-
         transaction.invalidateTransaction();
+        result = true;
         return result;
     }
 
@@ -124,7 +124,15 @@ public class RainforestShop {
      */
     List<String> getAvailableItems(Transaction transaction) {
         List<String> ls = Collections.emptyList();
-        // TODO: Implement the remaining part!
+        // TO DO: Implement the remaining part!
+        //1. look at the product monitors
+        for (ProductMonitor productMonitor : available_withdrawn_products.values()) {
+            //2. for each product monitor, look at the queue of available items
+            for (Item availableItem : productMonitor.available) {
+                //3. add each item in the available item queue to the list ls
+                ls.add(availableItem.productName);
+            }
+        }
         return ls;
     }
 
@@ -161,10 +169,20 @@ public class RainforestShop {
      * @param object        Object to be reshelved
      * @return  Returns true if the object existed before and if that was basketed by the current thread, returns false otherwise
      */
+    // 6. if successful, change result to true and return
     boolean shelfProduct(Transaction transaction, Item object) {
         boolean result = false;
         if (transaction.getSelf() == null || (transaction.getUuid() == null)) return false;
-        // TODO: Implement the remaining part!
+        // TO DO: Implement the remaining part!
+        // 1. check the object is not null
+        if (object == null) return false;
+        // 2. check to make sure that the object is in the basket (if not, return false)
+        if (!transaction.getUnmutableBasket().contains(object)) return false;
+        // 3. create temporary product monitor
+        ProductMonitor productMonitor = available_withdrawn_products.get(object.productName);
+        // 4. use the doshelf() to remove the item from withdrawn and add to available
+        if (!productMonitor.doShelf(object)) return false;
+        result = true;
         return result;
     }
 
