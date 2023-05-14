@@ -16,7 +16,7 @@ public class RainforestShop {
     /// For correctly implementing the server, please consider that
 
     private final boolean isGlobalLock;
-    private boolean supplierStopped;
+    private volatile boolean supplierStopped;
     private Set<String> allowed_clients;
     public HashMap<UUID, String> UUID_to_user;
     private volatile HashMap<String, ProductMonitor> available_withdrawn_products;
@@ -73,15 +73,11 @@ public class RainforestShop {
     }
 
     /**
-     * Performing an user log-in. To generate a transaction ID, please use the customary Java method
-     * 
-     * UUID uuid = UUID.randomUUID();
-     * 
-     * @param username      Username that wants to login
-     *
+     * Performing an user log-in. To generate a transaction ID, please use the customary Java method     *
+     * UUID uuid = UUID.randomUUID();     *
+     * @param username      Username that wants to login     *
      * @return A non-empty transaction if the user is logged in for the first time, and he hasn't other instances of itself running at the same time
-     *         In all the other cases, thus including the ones where the user is not registered, this returns an empty transaction
-     *
+     *         In all the other cases, thus including the ones where the user is not registered, this returns an empty transaction     *
      */
     public Optional<Transaction> login(String username) {
         Optional<Transaction> result = Optional.empty();
@@ -110,7 +106,6 @@ public class RainforestShop {
     boolean logout(Transaction transaction) {
         boolean result = false;
         // TO DO: Implement the remaining part!
-
         if (transaction.getUnmutableBasket() != null) {
             for (Item productInBasket : transaction.getUnmutableBasket()){
                 for (Map.Entry<String, ProductMonitor> entry : available_withdrawn_products.entrySet()) {

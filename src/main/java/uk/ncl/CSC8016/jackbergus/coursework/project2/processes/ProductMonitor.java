@@ -9,7 +9,8 @@ public class ProductMonitor {
     Queue<Item> available;
     Queue<Item> withdrawn;
     //I chose to use one lock for the synchronized code blocks instead of two individual ones for available and withdrawn
-    //I chose to do this because some methods modify both, and this will ensure the integrity of the data.
+    //I chose to do this because some methods modify both available and withdrawn.
+    // This will ensure the integrity of the data.
     private Object pmLock = new Object();
     public ProductMonitor() {
         available = new LinkedList<>();
