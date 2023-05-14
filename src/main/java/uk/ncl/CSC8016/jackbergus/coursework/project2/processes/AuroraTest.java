@@ -10,7 +10,7 @@ import java.util.*;
 
 public class AuroraTest {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         List<String> usernames = new ArrayList<>();
         usernames.add("user1");
         usernames.add("user2");
@@ -26,8 +26,6 @@ public class AuroraTest {
         availableProducts.put("peach", new Pair<>(2.1, 6));
         availableProducts.put("mangosteen", new Pair<>(3.5, 60));
 
-        RainforestShop rainforestShop = new RainforestShop(usernames, availableProducts, true);
-
         ProductMonitor productMonitor = new ProductMonitor();
         BigInteger biggie = UniqueProductIdGenerator.nextProductId();
         Item item1 = new Item("apple", 2.2, biggie);
@@ -37,15 +35,67 @@ public class AuroraTest {
         productMonitor.addAvailableProduct(item2);
         productMonitor.addAvailableProduct(item3);
 
-        //TODO: start multiple threads
-        //TODO: use the same user multiple times
+        /*
+        NOTE THE ADDALL DOESN'T SEEM TO BE WORKING
+         */
 
+        RainforestShop rainforestShop = new RainforestShop(usernames, availableProducts, true);
+        UUID myUUID = UUID.randomUUID();
+        Transaction newTrans = new Transaction(rainforestShop, "user1", myUUID);
+        List<String> avPr = rainforestShop.getAvailableItems(newTrans);
+        for (String availPr : avPr) System.out.println(availPr);
+
+        //test login function
         var t1 = new Thread(() -> {
             Optional<Transaction> transactionOptional = rainforestShop.login("user1");
             if (transactionOptional.isPresent()) {
-                Transaction existingT = transactionOptional.get();
+                Transaction newTransaction = transactionOptional.get();
+                //test logout function
+                rainforestShop.logout(newTransaction);
             }
 
         });
+        var t2 = new Thread(() -> {
+            Optional<Transaction> transactionOptional = rainforestShop.login("user2");
+            if (transactionOptional.isPresent()) {
+                Transaction newTransaction = transactionOptional.get();
+                /*
+                System.out.println("test getAvailableItems");
+                List<String> ls = newTransaction.getAvailableItems();
+                for (String availableProd : ls) {
+                    System.out.println(availableProd);
+                }
+
+                 */
+                /*
+                try {
+                    List<String> availableItems = rainforestShop.getAvailableItems(newTransaction);
+                } catch (UnsupportedOperationException e) {
+                    e.printStackTrace();
+                    rainforestShop.logout(newTransaction);
+                }
+                //for (String availableItem : availableItems) System.out.println(availableItem);
+                System.out.println("test new login, new user");
+
+                 */
+            }
+        }
+        );
+        var t3 = new Thread(() -> {
+            System.out.println("multiple logins from same user");
+            Optional<Transaction> transactionOptional = rainforestShop.login("user2");
+            if (transactionOptional.isPresent()) {
+                Transaction newTransaction = transactionOptional.get();
+
+            }
+        }
+        );
+        t1.start();
+        t2.start();
+        t3.start();
+
+        t1.join();
+        t2.join();
+        t3.join();
     }
 }

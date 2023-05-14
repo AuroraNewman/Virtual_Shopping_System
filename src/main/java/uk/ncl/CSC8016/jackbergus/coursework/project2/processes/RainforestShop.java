@@ -126,15 +126,15 @@ public class RainforestShop {
      * @return
      */
     List<String> getAvailableItems(Transaction transaction) {
+        //TODO: verify user like the basketproduct()
         List<String> ls = Collections.emptyList();
         // TO DO: Implement the remaining part!
         //1. look at the product monitors
         for (ProductMonitor productMonitor : available_withdrawn_products.values()) {
-            //2. for each product monitor, look at the queue of available items
-            for (Item availableItem : productMonitor.available) {
-                //3. add each item in the available item queue to the list ls
-                ls.add(availableItem.productName);
-            }
+            //2a. for each product monitor, use the getAvailableItems() method to return list of items
+            //2b. addAll the items in the list to the list ls
+                ls.addAll(productMonitor.getAvailableItems());
+                for (String productName : ls) System.out.println(productName);
         }
         return ls;
     }
