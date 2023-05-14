@@ -8,21 +8,16 @@ import java.util.stream.Collectors;
 public class ProductMonitor {
     Queue<Item> available;
     Queue<Item> withdrawn;
-    private Object lock1 = new Object();
-    private Object lock2 = new Object();
-    private Object lock3 = new Object();
-    private Object lock4 = new Object();
-    private Object lock5 = new Object();
-    private Object lock6 = new Object();
-    private Object lock7 = new Object();
-    private Object lock8 = new Object();
+    //I chose to use one lock for the synchronized code blocks instead of two individual ones for available and withdrawn
+    //I chose to do this because some methods modify both, and this will ensure the integrity of the data.
+    private Object pmLock = new Object();
     public ProductMonitor() {
         available = new LinkedList<>();
         withdrawn = new LinkedList<>();
     }
 
     public void removeItemsFromUnavailability(Collection<Item> cls) {
-        synchronized (lock1) {
+        synchronized (pmLock) {
             for (Item x : cls) {
                 try {
                     if (withdrawn.remove(x))
@@ -41,7 +36,7 @@ public class ProductMonitor {
 
     public Optional<Item> getAvailableItem() {
         Optional<Item> o = Optional.empty();
-        synchronized (lock2) {
+        synchronized (pmLock) {
             try {
                 if (!available.isEmpty()) {
                     var obj = available.remove();
@@ -59,7 +54,7 @@ public class ProductMonitor {
 
     public boolean doShelf(Item u) {
         boolean result = false;
-        synchronized (lock3) {
+        synchronized (pmLock) {
             try {
                 if (withdrawn.remove(u)) {
                     available.add(u);
@@ -83,7 +78,7 @@ public class ProductMonitor {
 
     public Set<String> getAvailableItems() {
         Set<String> s = null;
-        synchronized (lock4) {
+        synchronized (pmLock) {
             try {
                 s = available.stream().map(x -> x.productName).collect(Collectors.toSet());
             } catch (Exception e){
@@ -94,7 +89,7 @@ public class ProductMonitor {
     }
 
     public void addAvailableProduct(Item x) {
-        synchronized(lock5) {
+        synchronized(pmLock) {
             try {
                 available.add(x);
             } catch (Exception e){
@@ -108,7 +103,7 @@ public class ProductMonitor {
                                  List<Item> currentlyPurchasable,
                                  List<Item> currentlyUnavailable) {
         double total_cost = 0.0;
-        synchronized (lock6) {
+        synchronized (pmLock) {
             try {
                 for (var x : toIterate) {
                     if (withdrawn.contains(x)) {
@@ -131,7 +126,7 @@ public class ProductMonitor {
      */
 
     public void makeAvailable(List<Item> toIterate) {
-        synchronized (lock7) {
+        synchronized (pmLock) {
             try {
                 for (var x : toIterate) {
                     if (withdrawn.remove(x)) {
@@ -146,7 +141,7 @@ public class ProductMonitor {
 
     public boolean completelyRemove(List<Item> toIterate) {
         boolean allEmpty = false;
-        synchronized (lock8) {
+        synchronized (pmLock) {
             try {
                 for (var x : toIterate) {
                     withdrawn.remove(x);
