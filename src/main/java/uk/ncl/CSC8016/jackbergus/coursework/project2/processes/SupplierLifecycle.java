@@ -4,9 +4,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SupplierLifecycle implements Runnable {
-
     private final RainforestShop s;
-
     private volatile boolean hasRetrievedOneProduct;
     private AtomicBoolean stopped;
     private final Random rng;

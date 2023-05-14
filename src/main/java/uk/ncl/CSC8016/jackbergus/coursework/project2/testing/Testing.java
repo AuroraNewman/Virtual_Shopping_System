@@ -622,7 +622,7 @@ public class Testing {
     public static double total_score = 0.0;
     public static double total_max_score = 0.0;
 
-
+/*
     public static void FunctionScoring(List<Test> scoring) {
         for (var x : scoring) {
             var result = x.test.apply(isGlobal);
@@ -634,6 +634,8 @@ public class Testing {
             total_score += score;
         }
     }
+
+ */
 
     public static void main(String args[]) {
         List<Test> scoring = new ArrayList<>();
@@ -670,7 +672,7 @@ public class Testing {
         scoring.add(new Test(test_11,
                 "Correctly shelving the products",
                 5.0));
-        FunctionScoring(scoring);
+        //FunctionScoring(scoring);
         scoring.clear();
 
         System.out.println("");
@@ -695,7 +697,7 @@ public class Testing {
         scoring.add(new Test(test_12,
                 "Supplier Stopping Condition",
                 3.0));
-        FunctionScoring(scoring);
+        //FunctionScoring(scoring);
 
         System.out.println("");
         System.out.println("[" + StudentId + "] Total Score: " + total_score + "/" + total_max_score + " = " + (total_score/total_max_score));

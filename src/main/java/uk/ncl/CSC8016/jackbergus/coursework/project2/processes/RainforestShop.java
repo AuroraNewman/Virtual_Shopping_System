@@ -22,6 +22,8 @@ public class RainforestShop {
     private volatile HashMap<String, ProductMonitor> available_withdrawn_products;
     private HashMap<String, Double> productWithCost = new HashMap<>();
     private volatile Queue<String> currentEmptyItem;
+    //create Object lock to use in synchronized code block
+    private Object lock1 = new Object();
 
 
     public boolean isGlobalLock() {
@@ -84,9 +86,15 @@ public class RainforestShop {
     public Optional<Transaction> login(String username) {
         Optional<Transaction> result = Optional.empty();
         if (allowed_clients.contains(username)) {
-            UUID uuid = UUID.randomUUID();
-            UUID_to_user.put(uuid, username);
-            result = Optional.of(new Transaction(this, username, uuid));
+            synchronized (lock1) {
+                try {
+                    UUID uuid = UUID.randomUUID();
+                    UUID_to_user.put(uuid, username);
+                    result = Optional.of(new Transaction(this, username, uuid));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return result;
     }
@@ -190,7 +198,7 @@ public class RainforestShop {
      * Stops the food supplier by sending a specific message. Please observe that no product shall be named @stop!
      */
     public void stopSupplier() {
-        // TODO: Provide a correct concurrent implementation!
+        //TODO: Provide a correct concurrent implementation!
         currentEmptyItem.add("@stop!");
     }
 

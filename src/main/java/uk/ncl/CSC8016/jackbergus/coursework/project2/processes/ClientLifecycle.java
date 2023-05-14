@@ -82,7 +82,7 @@ public class ClientLifecycle implements Runnable {
                     if (transaction.basketProduct(obj)) {
                         if (rng.nextDouble(0.0, nextAfter) < shelfing_prob) {
                             if (!transaction.shelfProduct(UtilityMethods.getRandomElement(transaction.getUnmutableBasket(), rng)))
-                                throw new RuntimeException("ERROR: I musth be able to shelf a product that I added!");
+                                throw new RuntimeException("ERROR: I must be able to shelf a product that I added!");
                         }
                     }
                 }
