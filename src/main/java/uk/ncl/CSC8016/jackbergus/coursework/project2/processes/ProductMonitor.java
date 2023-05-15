@@ -155,4 +155,9 @@ public class ProductMonitor {
         }
         return allEmpty;
     }
+    //ADDED toString for testing purposes
+    @Override
+    public String toString() {
+        return available.size() + " are available; " + withdrawn.size() + " are withdrawn.";
+    }
 }

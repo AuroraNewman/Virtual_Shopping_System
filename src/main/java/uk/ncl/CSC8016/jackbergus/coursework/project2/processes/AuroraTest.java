@@ -22,6 +22,7 @@ public class AuroraTest {
         clientIDs.add("789");
 
         HashMap<String, Pair<Double, Integer>> availableProducts = new HashMap<>();
+
         availableProducts.put("apple", new Pair<>(2.2, 4));
         availableProducts.put("peach", new Pair<>(2.1, 6));
         availableProducts.put("mangosteen", new Pair<>(3.5, 60));
@@ -31,13 +32,11 @@ public class AuroraTest {
         Item item1 = new Item("apple", 2.2, biggie);
         Item item2 = new Item("peach", 1.8, biggie);
         Item item3 = new Item("boost", 4.9, biggie);
+        Item item4 = new Item("mangosteen", 3.5, biggie);
         productMonitor.addAvailableProduct(item1);
         productMonitor.addAvailableProduct(item2);
         productMonitor.addAvailableProduct(item3);
 
-        /*
-        NOTE THE ADDALL DOESN'T SEEM TO BE WORKING
-         */
 
         RainforestShop rainforestShop = new RainforestShop(usernames, availableProducts, true);
         UUID myUUID = UUID.randomUUID();
@@ -59,25 +58,11 @@ public class AuroraTest {
             Optional<Transaction> transactionOptional = rainforestShop.login("user2");
             if (transactionOptional.isPresent()) {
                 Transaction newTransaction = transactionOptional.get();
-                /*
-                System.out.println("test getAvailableItems");
+
+                //test getAvailableItems()
                 List<String> ls = newTransaction.getAvailableItems();
-                for (String availableProd : ls) {
-                    System.out.println(availableProd);
-                }
+                for (String productName : ls) System.out.println(productName);
 
-                 */
-                /*
-                try {
-                    List<String> availableItems = rainforestShop.getAvailableItems(newTransaction);
-                } catch (UnsupportedOperationException e) {
-                    e.printStackTrace();
-                    rainforestShop.logout(newTransaction);
-                }
-                //for (String availableItem : availableItems) System.out.println(availableItem);
-                System.out.println("test new login, new user");
-
-                 */
             }
         }
         );
@@ -87,9 +72,19 @@ public class AuroraTest {
             if (transactionOptional.isPresent()) {
                 Transaction newTransaction = transactionOptional.get();
 
+                //test basketProductByName()
+                System.out.println(rainforestShop.basketProductByName(newTransaction, item4.productName));
+
+                //test shelfProduct(), expect true
+                //TODO: figure out why this isn't returning properly
+                System.out.println(rainforestShop.shelfProduct(newTransaction, item4));
+                //test shelfProduct(), expect false
+                System.out.println(rainforestShop.shelfProduct(newTransaction, item2));
+
             }
         }
         );
+
         t1.start();
         t2.start();
         t3.start();

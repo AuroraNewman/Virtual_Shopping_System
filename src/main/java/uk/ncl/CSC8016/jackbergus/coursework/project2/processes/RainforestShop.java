@@ -125,18 +125,20 @@ public class RainforestShop {
      * @param transaction
      * @return
      */
+
     List<String> getAvailableItems(Transaction transaction) {
-        //TODO: verify user like the basketproduct()
+        //TODO: ASK DR. BERGAMI IF I'M SUPPOSED TO BE RETURNING A NEW LIST
         List<String> ls = Collections.emptyList();
         // TO DO: Implement the remaining part!
-        //1. look at the product monitors
+        if (transaction.getSelf() == null || (transaction.getUuid() == null)) return ls;
+        //1. create new list instead of immutable empty list
+        List<String> availableItems = new ArrayList<>();
+        //2. extract product monitors from the AWP list
         for (ProductMonitor productMonitor : available_withdrawn_products.values()) {
-            //2a. for each product monitor, use the getAvailableItems() method to return list of items
-            //2b. addAll the items in the list to the list ls
-                ls.addAll(productMonitor.getAvailableItems());
-                for (String productName : ls) System.out.println(productName);
+        //3. add all the items to availableItems
+            availableItems.addAll(productMonitor.getAvailableItems());
         }
-        return ls;
+        return availableItems;
     }
 
     /**
@@ -175,16 +177,16 @@ public class RainforestShop {
     // 6. if successful, change result to true and return
     boolean shelfProduct(Transaction transaction, Item object) {
         boolean result = false;
-        if (transaction.getSelf() == null || (transaction.getUuid() == null)) return false;
+        if (transaction.getSelf() == null || (transaction.getUuid() == null)) return result;
         // TO DO: Implement the remaining part!
         // 1. check the object is not null
-        if (object == null) return false;
+        if (object == null) return result;
         // 2. check to make sure that the object is in the basket (if not, return false)
-        if (!transaction.getUnmutableBasket().contains(object)) return false;
+        if (!transaction.getUnmutableBasket().contains(object)) return result;
         // 3. create temporary product monitor
         ProductMonitor productMonitor = available_withdrawn_products.get(object.productName);
         // 4. use the doshelf() to remove the item from withdrawn and add to available
-        if (!productMonitor.doShelf(object)) return false;
+        if (!productMonitor.doShelf(object)) return result;
         result = true;
         return result;
     }
