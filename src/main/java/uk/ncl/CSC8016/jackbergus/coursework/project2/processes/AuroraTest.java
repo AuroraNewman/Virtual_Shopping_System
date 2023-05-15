@@ -8,6 +8,9 @@ import javax.swing.text.html.Option;
 import java.math.BigInteger;
 import java.util.*;
 
+import static uk.ncl.CSC8016.jackbergus.coursework.project2.processes.Assertions.assertFalse;
+import static uk.ncl.CSC8016.jackbergus.coursework.project2.processes.Assertions.assertTrue;
+
 public class AuroraTest {
 
     public static void main(String[] args) throws InterruptedException {
@@ -74,12 +77,16 @@ public class AuroraTest {
 
                 //test basketProductByName()
                 System.out.println(rainforestShop.basketProductByName(newTransaction, item4.productName));
+                //test basketing too many products
+                for (int j = 5; j > 0; j--) {
+                    System.out.println(rainforestShop.basketProductByName(newTransaction, item1.productName));
+                }
 
                 //test shelfProduct(), expect true
                 //TODO: figure out why this isn't returning properly
-                System.out.println(rainforestShop.shelfProduct(newTransaction, item4));
+                assertTrue(rainforestShop.shelfProduct(newTransaction, item4));
                 //test shelfProduct(), expect false
-                System.out.println(rainforestShop.shelfProduct(newTransaction, item2));
+               assertFalse(rainforestShop.shelfProduct(newTransaction, item2));
 
             }
         }

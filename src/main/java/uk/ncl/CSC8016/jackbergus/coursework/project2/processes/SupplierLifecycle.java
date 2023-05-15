@@ -34,6 +34,7 @@ public class SupplierLifecycle implements Runnable {
             hasRetrievedOneProduct = true;
             int howManyItems = this.rng.nextInt(1, 6);
             s.refurbishWithItems(howManyItems, product);
+
         }
     }
 
