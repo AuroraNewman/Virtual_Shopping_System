@@ -59,6 +59,18 @@ public class Assertions {
             System.err.println("Assertion failed: " + e.getMessage());
         }
     }
+    public static void assertExpectedThrowable(
+            Class<? extends Throwable> expectedClass, Throwable t) {
+        if (!expectedClass.isInstance(t)) {
+            AssertionError e = new AssertionError(
+                    buildMessage(expectedClass.getName(), t));
+
+            // update cause of assertion error with t
+            e.initCause(t);
+
+            throw e;
+        }
+    }
 
     private static String buildMessage(Object expected, Object actual) {
         final StringBuilder sb = new StringBuilder("expected ");
